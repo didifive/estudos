@@ -1,0 +1,57 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>Insert title here</title>
+</head>
+<body>
+<div th:fragment="header">
+	<nav class="navbar navbar-expand-lg navbar-light bg-light mb-4">
+		<div class="container-fluid">
+			<a class="navbar-brand" href="#">GFT</a>
+			<button class="navbar-toggler" type="button"
+				data-bs-toggle="collapse" data-bs-target="#navbarNavDropdown"
+				aria-controls="navbarNavDropdown" aria-expanded="false"
+				aria-label="Toggle navigation">
+				<span class="navbar-toggler-icon"></span>
+			</button>
+			<div class="collapse navbar-collapse" id="navbarNavDropdown">
+				<ul class="navbar-nav">
+					<li class="nav-item"><a class="nav-link active"
+						aria-current="page" th:href="@{/}">Home</a></li>
+					<li class="nav-item dropdown"><a
+						class="nav-link dropdown-toggle" href="#"
+						id="navbarDropdownMenuLinguagens" role="button"
+						data-bs-toggle="dropdown" aria-expanded="false"> Linguagens </a>
+						<ul class="dropdown-menu"
+							aria-labelledby="navbarDropdownMenuLinguagens">
+							<li><a class="dropdown-item" th:href="@{/linguagem}">Listar</a></li>
+							<li><a class="dropdown-item" th:href="@{/linguagem/novo}">Cadastrar</a></li>
+						</ul></li>
+					<li class="nav-item dropdown"><a
+						class="nav-link dropdown-toggle" href="#"
+						id="navbarDropdownMenuDesenvolvedores" role="button"
+						data-bs-toggle="dropdown" aria-expanded="false">
+							Desenvolvedores </a>
+						<ul class="dropdown-menu"
+							aria-labelledby="navbarDropdownMenuDesenvolvedores">
+							<li><a class="dropdown-item" th:href="@{/desenvolvedor}">Listar</a></li>
+							<li><a class="dropdown-item"
+								th:href="@{/desenvolvedor/editar}">Cadastrar</a></li>
+						</ul></li>
+					<li class="nav-item dropdown"><a
+						class="nav-link dropdown-toggle" href="#"
+						id="navbarDropdownMenuProjetos" role="button"
+						data-bs-toggle="dropdown" aria-expanded="false"> Projetos </a>
+						<ul class="dropdown-menu"
+							aria-labelledby="navbarDropdownMenuProjetos">
+							<li><a class="dropdown-item" th:href="@{/projeto}">Listar</a></li>
+							<li><a class="dropdown-item" th:href="@{/projeto/editar}">Cadastrar</a></li>
+						</ul></li>
+				</ul>
+			</div>
+		</div>
+	</nav>
+</div>
+</body>
+</html>

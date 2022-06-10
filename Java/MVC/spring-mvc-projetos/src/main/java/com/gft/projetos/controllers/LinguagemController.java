@@ -5,6 +5,7 @@ import javax.validation.Valid;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
@@ -64,6 +65,25 @@ public class LinguagemController {
 		
 		ModelAndView mv = new ModelAndView("linguagem/listar.html");
 		mv.addObject("lista", linguagemService.listarLinguagens());
+		
+		return mv;
+	}
+	
+	@GetMapping("/detalhes")
+	public ModelAndView detalheLinguagem(Long id) {
+		
+		ModelAndView mv = new ModelAndView("linguagem/detalhes.html");
+		
+		Linguagem linguagem;
+		
+		try {
+			linguagem = linguagemService.obterLinguagem(id);
+		} catch (Exception e) {
+			linguagem = new Linguagem();
+			mv.addObject("mensagem",e.getMessage());
+		}
+		
+		mv.addObject("linguagem", linguagem);
 		
 		return mv;
 	}

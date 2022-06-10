@@ -17,6 +17,9 @@
 		<table class="table table-striped">
 			<thead>
 				<tr>
+					<th colspan="7">Linguagens</th>
+				</tr>
+				<tr>
 					<th>Id</th>
 					<th>Nome</th>
 					<th>Opções</th>
@@ -27,12 +30,15 @@
 					<td th:text="${linguagem.id}"></td>
 					<td th:text="${linguagem.nome}" width="70%"></td>
 					<td>
-						<a class="btn btn-primary btn-sm" th:href="@{/linguagem/editar(id=${linguagem.id})}">
+						<a class="btn btn-primary btn-sm" title="Detalhes" th:href="@{/linguagem/detalhes(id=${linguagem.id})}">
+							<i class="fa-solid fa-file-lines"></i> Detalhes
+						</a>
+						<a class="btn btn-primary btn-sm ms-2" th:href="@{/linguagem/editar(id=${linguagem.id})}">
 							<i class="fa-solid fa-pen-to-square"></i> Editar
 						</a>
 						<a
 							type="button"
-							class="btn btn-secondary btn-sm"
+							class="btn btn-secondary btn-sm ms-2"
 							data-bs-toggle="modal"
 							data-bs-target="#modalExcluir"
 							data-modal-object="linguagem"

@@ -2,6 +2,7 @@ package com.gft.projetos.entities;
 
 import java.util.List;
 
+import javax.persistence.CascadeType;
 import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
@@ -22,11 +23,11 @@ public class Linguagem {
 	private String nome;
 	
 	@JsonManagedReference
-	@OneToMany(mappedBy = "linguagem")
+	@OneToMany(mappedBy = "linguagem", cascade = { CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE })
 	private List<Desenvolvedor> desenvolvedores;
 	
 	@JsonManagedReference
-	@OneToMany(mappedBy = "linguagem")
+	@OneToMany(mappedBy = "linguagem", cascade = { CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE })
 	private List<Projeto> projetos;
 		
 	public Long getId() {

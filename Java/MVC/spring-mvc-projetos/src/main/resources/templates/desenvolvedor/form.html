@@ -14,7 +14,10 @@
 	</div>
 	<div class="card">
 		<div class="card-header">
-			<p class="text-primary">Novo Desenvolvedor</p>
+			<h4 class="card-title">
+				<span th:text="${desenvolvedor.id == null ? 'Novo' : 'Editar'}"></span> 
+				Desenvolvedor
+			</h4>
 		</div>
 		<div class="card-body">
 			<form method="post" th:object="${desenvolvedor}" th:action="@{/desenvolvedor/editar}">

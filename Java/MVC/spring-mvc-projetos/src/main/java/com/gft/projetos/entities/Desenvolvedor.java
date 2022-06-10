@@ -8,8 +8,6 @@ import javax.persistence.Entity;
 import javax.persistence.GeneratedValue;
 import javax.persistence.GenerationType;
 import javax.persistence.Id;
-import javax.persistence.JoinColumn;
-import javax.persistence.JoinTable;
 import javax.persistence.ManyToMany;
 import javax.persistence.ManyToOne;
 import javax.validation.constraints.Digits;
@@ -41,11 +39,11 @@ public class Desenvolvedor {
 	private BigDecimal salarioMensal;
 	
 	@JsonBackReference
-	@ManyToOne
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE })
 	private Linguagem linguagem;
 	
 	@JsonManagedReference
-	@ManyToMany(mappedBy = "desenvolvedores", cascade = { CascadeType.ALL })
+	@ManyToMany(mappedBy = "desenvolvedores", cascade = { CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE })
 	private List<Projeto> projetos;
 
 	public Long getId() {

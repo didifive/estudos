@@ -19,7 +19,6 @@ import javax.validation.constraints.Size;
 import org.springframework.format.annotation.DateTimeFormat;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 
 @Entity
 public class Projeto {
@@ -36,7 +35,7 @@ public class Projeto {
 	private String apelido;
 	
 	@JsonBackReference
-	@ManyToOne
+	@ManyToOne(cascade = { CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE })
 	private Linguagem linguagem;
 	
 	@DateTimeFormat(pattern = "yyyy-MM-dd")
@@ -45,7 +44,7 @@ public class Projeto {
 	private BigDecimal orcamento;
 	
 	@JsonBackReference
-	@ManyToMany(cascade = { CascadeType.ALL })
+	@ManyToMany(cascade = { CascadeType.PERSIST, CascadeType.REFRESH, CascadeType.MERGE })
 	@JoinTable(
       name = "desenvolvedores_projetos",
       joinColumns = {

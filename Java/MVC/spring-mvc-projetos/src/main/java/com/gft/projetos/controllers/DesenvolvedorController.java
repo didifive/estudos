@@ -17,7 +17,6 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.gft.projetos.entities.Desenvolvedor;
-import com.gft.projetos.entities.Projeto;
 import com.gft.projetos.services.DesenvolvedorService;
 import com.gft.projetos.services.LinguagemService;
 
@@ -90,11 +89,15 @@ public class DesenvolvedorController {
 	}
 	
 	@GetMapping
-	public ModelAndView listarDesenvolvedores() {
+	public ModelAndView listarDesenvolvedores(String nome, String quatroLetras) {
 		
 		ModelAndView mv = new ModelAndView("desenvolvedor/listar.html");
-		mv.addObject("lista", desenvolvedorService.listarDesenvolvedores());
 		
+		mv.addObject("lista", desenvolvedorService.listarDesenvolvedores(nome, quatroLetras));
+		
+		mv.addObject("nome", nome);
+		mv.addObject("quatroLetras", quatroLetras);
+	
 		return mv;
 	}
 	

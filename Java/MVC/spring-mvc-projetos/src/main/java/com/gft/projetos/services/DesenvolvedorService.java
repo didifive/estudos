@@ -7,7 +7,6 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.gft.projetos.entities.Desenvolvedor;
-import com.gft.projetos.entities.Linguagem;
 import com.gft.projetos.repositories.DesenvolvedorRepository;
 import com.gft.projetos.repositories.LinguagemRepository;
 
@@ -25,9 +24,25 @@ public class DesenvolvedorService {
 		
 	}
 	
-	public List<Desenvolvedor> listarDesenvolvedores() {
+	public List<Desenvolvedor> listarDesenvolvedores(String nome, String quatroLetras) {
+		
+		if(nome!=null || quatroLetras!=null)
+			return listarDesenvolvedoresPorNomeEQuatroLetras(nome,quatroLetras);
+
+		return listarTodosDesenvolvedores();
+	
+	}
+	
+	public List<Desenvolvedor> listarDesenvolvedoresPorNomeEQuatroLetras(String nome, String quatroLetras) {
+		
+		return desenvolvedorRepository.findByNomeContainsAndQuatroLetrasContains(nome, quatroLetras);
+	
+	}
+	
+	public List<Desenvolvedor> listarTodosDesenvolvedores() {
 		
 		return desenvolvedorRepository.findAll();
+	
 	}
 	
 	public Desenvolvedor obterDesenvolvedor(Long id) throws Exception {

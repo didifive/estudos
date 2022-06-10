@@ -10,7 +10,10 @@
 	<div class="alert alert-primary" th:if="${mensagem != null}" th:text="${mensagem}"></div>
 	<div class="card">
 		<div class="card-header">
-			<p class="text-primary">Nova Linguagem</p>
+			<h4 class="card-title">
+				<span th:text="${linguagem.id == null ? 'Nova' : 'Editar'}"></span> 
+				Linguagem
+			</h4>
 		</div>
 		<div class="card-body">
 			<form method="post" th:object="${linguagem}" th:action="@{/linguagem/novo}">

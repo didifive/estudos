@@ -26,9 +26,25 @@ public class ProjetoService {
 		
 	}
 	
-	public List<Projeto> listarProjetos() {
+	public List<Projeto> listarProjetos(String nome, String apelido) {
+		
+		if(nome!=null || apelido!=null)
+			return listarProjetosPorNomeEApelido(nome,apelido);
+
+		return listarTodosProjetos();
+		
+	}
+	
+	public List<Projeto> listarProjetosPorNomeEApelido(String nome, String apelido) {
+		
+		return projetoRepository.findByNomeContainsAndApelidoContains(nome,apelido);
+
+	}
+	
+	public List<Projeto> listarTodosProjetos() {
 		
 		return projetoRepository.findAll();
+		
 	}
 	
 	public Projeto obterProjeto(Long id) throws Exception {

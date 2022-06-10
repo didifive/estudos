@@ -79,10 +79,15 @@ public class ProjetoController {
 
 
 	@GetMapping
-	public ModelAndView listarProjetos() {
+	public ModelAndView listarProjetos(String nome, String apelido) {
 		
 		ModelAndView mv = new ModelAndView("projeto/listar.html");
-		mv.addObject("lista", projetoService.listarProjetos());
+		
+		mv.addObject("lista", projetoService.listarProjetos(nome,apelido));
+		
+		mv.addObject("nome",nome);
+		mv.addObject("apelido",apelido);
+		
 		
 		return mv;
 	}
@@ -140,7 +145,7 @@ public class ProjetoController {
 	
 	private void adicionarObjetosMV(ModelAndView mv, Projeto projeto, String mensagem) {
 		mv.addObject("projeto", projeto);
-		mv.addObject("listaDesenvolvedores",desenvolvedorService.listarDesenvolvedores());
+		mv.addObject("listaDesenvolvedores",desenvolvedorService.listarTodosDesenvolvedores());
 		mv.addObject("listaLinguagens",linguagemService.listarLinguagens());
 		if(!mensagem.isBlank())
 			mv.addObject("mensagem",mensagem);
