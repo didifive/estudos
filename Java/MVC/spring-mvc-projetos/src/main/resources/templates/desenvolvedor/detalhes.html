@@ -1,0 +1,124 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout.html}"
+	 lang="pt-BR">
+
+<meta charset="UTF-8">
+
+<div layout:fragment="content">
+	<div class="alert alert-info d-flex justify-content-between align-items-center" th:if="${mensagem != null}">
+		<span th:text="${mensagem}"></span>
+		<a class="btn btn-info" th:href="@{/desenvolvedor}">Listar Desenvolvedores</a>
+		
+	</div>
+	<div th:if="${desenvolvedor != null}">
+		<div class="d-flex justify-content-between align-items-center">
+			<div>
+				<a class="btn btn-primary me-3" th:href="@{/desenvolvedor/editar(id=${desenvolvedor.id})}">
+					<i class="fa-solid fa-pen-to-square"></i> Editar
+				</a>
+				<a
+					type="button"
+					class="btn btn-secondary"
+					title="Excluir"
+					data-bs-toggle="modal"
+					data-bs-target="#modalExcluir"
+					th:data-modal-object="desenvolvedor"
+					th:data-modal-name="${desenvolvedor.nome}"
+					th:data-modal-link="@{/desenvolvedor/excluir(id=${desenvolvedor.id})}"
+				><i class="fa-solid fa-trash-can"></i> Excluir</a>
+				
+			</div>
+			<div>
+				<a class="btn btn-primary me-3" th:href="@{/desenvolvedor}">
+					<i class="fa-solid fa-list-ul"></i> Lista de Desenvolvedores
+				</a>
+				<a class="btn btn-primary me-3" href="javascript:history.back()">
+					<i class="fa-solid fa-arrow-left"></i> Voltar
+				</a>
+			</div>
+		</div>
+		
+		<h1 class="mt-3">Detalhes do Desenvolvedor </h1>
+		
+		<h3 class="mt-3" th:text="'# ' + ${desenvolvedor.id} + ' - ' + ${desenvolvedor.nome}"></h3>
+		
+		<p class="mt-3">4Letras: <span th:text="${desenvolvedor.quatroLetras}"></span></p>
+		<p class="mt-3">
+			E-mail:
+			<a th:href="'mailto:'+${desenvolvedor.email}">
+				<span th:text="${desenvolvedor.email}"></span>
+			</a>
+		</p>
+		<p class="mt-3">
+			Salário Mensal:
+			<span th:text="'R$ ' + ${#numbers.formatDecimal(desenvolvedor.salarioMensal, 0, 'POINT', 2, 'COMMA')}"></span>
+		</p>
+		<p>Linguagem: <span th:text="${desenvolvedor.linguagem.nome}"></span></p>
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th colspan="6">Projetos</th>
+				<tr>
+					<th>Id</th>
+					<th>Nome</th>
+					<th>Apelido</th>
+					<th>Linguagem</th>
+					<th>Data de Entrega</th>
+					<th>Orçamento</th>
+					<th>Opções</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="projeto : ${desenvolvedor.projetos}">
+					<td th:text="${projeto.id}"></td>
+					<td th:text="${projeto.nome}"></td>
+					<td th:text="${projeto.apelido}"></td>
+					<td th:text="${projeto.linguagem.nome}"></td>
+					<td th:text="${#dates.format(projeto.dataEntrega, 'dd/MM/yyyy')}"></td>
+					<td th:text="'R$ ' + ${#numbers.formatDecimal(projeto.orcamento, 0, 'POINT', 2, 'COMMA')}"></td>
+					<td class="d-flex justify-content-start align-items-center">
+						<div th:if="${desenvolvedor.linguagem.nome != projeto.linguagem.nome}">
+							<a type="button"
+								class="btn btn-danger btn-sm me-2"
+								href="#"
+								data-bs-toggle="popover"
+								data-bs-placement="top"
+								title="Linguagem Incompatível!"
+								th:data-bs-content="'Linguagem do desenvolvedor '
+									+ ${desenvolvedor.nome} 
+									+ ' (' + ${desenvolvedor.linguagem.nome} + ')' 
+									+' é diferente do projeto '
+									+ ${projeto.nome}
+									+ ' (' + ${projeto.linguagem.nome} + ')' 
+									+ '!'"
+							>
+								<i class="fa-solid fa-circle-exclamation"></i> Erro!
+							</a>
+						</div>
+						<a class="btn btn-primary btn-sm" title="Detalhes" th:href="@{/projeto/detalhes(id=${projeto.id})}">
+							<i class="fa-solid fa-file-lines"></i> Detalhes
+						</a>
+						<a class="btn btn-primary btn-sm ms-2" th:href="@{/projeto/editar(id=${projeto.id})}">
+							<i class="fa-solid fa-pen-to-square"></i> Editar
+						</a>
+						<a
+							type="button"
+							class="btn btn-secondary btn-sm ms-2"
+							title="Remover"
+							data-bs-toggle="modal"
+							data-bs-target="#modalRemoverDesenvolvedorDoProjeto"
+							th:data-modal-desenvolvedor="${desenvolvedor.nome}"
+							th:data-modal-projeto="${projeto.nome}"
+							th:data-modal-link="@{/projeto/detalhes/excluirDesenvolvedor(idProjeto=${projeto.id},idDesenvolvedor=${desenvolvedor.id})}"
+						>
+							<i class="fa-solid fa-eraser"></i> Remover
+						</a>
+					</td>
+				</tr>
+			</tbody>
+		</table>
+	</div>	
+</div>
+</html>

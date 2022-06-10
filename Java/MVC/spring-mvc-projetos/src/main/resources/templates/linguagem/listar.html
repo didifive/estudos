@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout.html}"
+	 lang="pt-BR">
+
+<meta charset="UTF-8">
+
+<div layout:fragment="content">
+	
+	<div class="alert alert-info d-flex justify-content-between  align-items-center" th:if="${#lists.isEmpty(lista)}">
+		Nenhuma Linguagem Cadastrada.
+		<a class="btn btn-info" th:href="@{/linguagem/novo}">Cadastrar Novo</a>
+	</div>
+	<div class="alert alert-primary" th:if="${mensagem != null}" th:text="${mensagem}"></div>
+	<div th:if="${not #lists.isEmpty(lista)}">
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th>Id</th>
+					<th>Nome</th>
+					<th>Opções</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="linguagem : ${lista}">
+					<td th:text="${linguagem.id}"></td>
+					<td th:text="${linguagem.nome}" width="70%"></td>
+					<td>
+						<a class="btn btn-primary btn-sm" th:href="@{/linguagem/editar(id=${linguagem.id})}">
+							<i class="fa-solid fa-pen-to-square"></i> Editar
+						</a>
+						<a
+							type="button"
+							class="btn btn-secondary btn-sm"
+							data-bs-toggle="modal"
+							data-bs-target="#modalExcluir"
+							data-modal-object="linguagem"
+							th:data-modal-name="${linguagem.nome}"
+							th:data-modal-link="@{/linguagem/excluir(id=${linguagem.id})}"
+						><i class="fa-solid fa-trash-can"></i> Excluir</a>
+					</td>
+			</tbody>
+		</table>
+	</div>
+</div>
+	 
+</html>

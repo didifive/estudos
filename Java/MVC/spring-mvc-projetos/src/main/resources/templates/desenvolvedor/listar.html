@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout.html}"
+	 lang="pt-BR">
+
+<meta charset="UTF-8">
+
+<div layout:fragment="content">
+	
+	<div class="alert alert-info d-flex justify-content-between align-items-center" th:if="${#lists.isEmpty(lista)}">
+		<span>Nenhum Desenvolvedor Cadastrado.</span>
+		<a class="btn btn-info" th:href="@{/desenvolvedor/editar}">Cadastrar Novo</a>
+	</div>
+	<div class="alert alert-primary" th:if="${mensagem != null}">
+		<span th:text="${mensagem}"></span>
+		<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+		<img src="close.soon" style="display:none;" onerror="(function(el){ setTimeout(function(){ el.parentNode.parentNode.removeChild(el.parentNode); },3000 ); })(this);" />
+	</div>
+	<div th:if="${not #lists.isEmpty(lista)}">
+		<table class="table table-striped">
+			<thead>
+				<tr>
+					<th colspan="7">Desenvolvedores</th>
+				</tr>
+				<tr>
+					<th>Id</th>
+					<th>Nome</th>
+					<th>4Letras</th>
+					<th>E-mail</th>
+					<th>Salário Mensal</th>
+					<th>Linguagem</th>
+					<th>Opções</th>
+				</tr>
+			</thead>
+			<tbody>
+				<tr th:each="desenvolvedor : ${lista}">
+					<td th:text="${desenvolvedor.id}"></td>
+					<td th:text="${desenvolvedor.nome}"></td>
+					<td th:text="${desenvolvedor.quatroLetras}"></td>
+					<td th:text="${desenvolvedor.email}"></td>
+					<td th:text="'R$ ' + ${#numbers.formatDecimal(desenvolvedor.salarioMensal, 0, 'POINT', 2, 'COMMA')}"></td>
+					<td th:text="${desenvolvedor.linguagem.nome}"></td>
+					<td>
+						<a class="btn btn-primary btn-sm" title="Detalhes" th:href="@{/desenvolvedor/detalhes(id=${desenvolvedor.id})}">
+							<i class="fa-solid fa-file-lines"></i> Detalhes
+						</a>
+						<a class="btn btn-primary btn-sm ms-2" th:href="@{/desenvolvedor/editar(id=${desenvolvedor.id})}">
+							<i class="fa-solid fa-pen-to-square"></i> Editar
+						</a>
+						<a
+							type="button"
+							class="btn btn-secondary btn-sm ms-2"
+							data-bs-toggle="modal"
+							data-bs-target="#modalExcluir"
+							data-modal-object="desenvolvedor"
+							th:data-modal-name="${desenvolvedor.nome}"
+							th:data-modal-link="@{/desenvolvedor/excluir(id=${desenvolvedor.id})}"
+						><i class="fa-solid fa-trash-can"></i> Excluir</a>
+					</td>
+			</tbody>
+		</table>
+	</div>
+</div>
+	 
+</html>

@@ -1,0 +1,100 @@
+<!DOCTYPE html>
+<html xmlns:th="http://www.thymeleaf.org"
+	xmlns:layout="http://www.ultraq.net.nz/thymeleaf/layout"
+	layout:decorate="~{layout.html}"
+	 lang="pt-BR">
+
+<meta charset="UTF-8">
+
+<div layout:fragment="content">
+	<div class="alert alert-primary d-flex justify-content-between" th:if="${mensagem != null}">
+		<span th:text="${mensagem}"></span>
+		<button type="button" class="btn-close" data-bs-dismiss="alert" aria-label="Close"></button>
+		<img src="close.soon" alt="close soon" style="display:none;" onerror="(function(el){ setTimeout(function(){ el.parentNode.parentNode.removeChild(el.parentNode); },3000 ); })(this);" />
+	</div>
+	<div class="card">
+		<div class="card-header">
+			<p class="text-primary">Novo Projeto</p>
+		</div>
+		<div class="card-body">
+			<form method="post" th:object="${projeto}" th:action="@{/projeto/editar}">
+				<input type="hidden" th:field="*{id}"></input>
+				<div class="form-group mb-3">
+					<label for="nome">Nome:</label>
+					<input class="form-control" type="text" th:field="*{nome}" required></input>
+					<div class="text-danger" th:if="${#fields.hasErrors('nome')}" th:errors="*{nome}"></div>
+				</div>
+				<div class="form-group mb-3">
+					<label for="apelido">Apelido:</label>
+					<input class="form-control text-uppercase" type="text" maxlength="8" th:field="*{apelido}" required></input>
+					<div class="text-danger" th:if="${#fields.hasErrors('apelido')}" th:errors="*{apelido}"></div>
+				</div>
+				<div class="form-group mb-3">
+					<label for="linguagem">Linguagem:</label>
+					<select class="form-select" th:field="*{linguagem}" onload="() => this.change()">
+						<option th:each="linguagem: ${listaLinguagens}" th:value="${linguagem.id}" th:text="${linguagem.nome}"></option>
+					</select>
+					<div class="text-danger" th:if="${#fields.hasErrors('linguagem')}" th:errors="*{linguagem}"></div>
+				</div>
+				<div class="form-group mb-3">
+					<label for="_dataEntrega">Data de Entrega:</label>
+					<input class="form-control" type="text" id="_dataEntrega" th:value="${#dates.format(projeto.dataEntrega, 'dd/MM/yyyy')}"></input>
+					<input type="hidden" th:field="*{dataEntrega}"></input>
+					<div class="text-danger" th:if="${#fields.hasErrors('dataEntrega')}" th:errors="*{dataEntrega}"></div>
+				</div>
+				<div class="form-group mb-3">
+					<label for="orcamento">Orçamento:</label>
+					<input class="form-control" step="0.01" min="0.01" type="number" th:field="*{orcamento}" required></input>
+					<div class="text-danger" th:if="${#fields.hasErrors('orcamento')}" th:errors="*{orcamento}"></div>
+				</div>
+				<div class="form-group mb-3">
+					<div id="semDesenvolvedor" class="alert alert-info mb-3">
+						Não existe desenvolvedor cadastrado para a linguagem selecionada!
+					</div>
+					<label id="labelDesenvolvedores">Desenvolvedores:</label>
+					<div th:each="desenvolvedor: ${listaDesenvolvedores}">
+						<div class="listaDesenvolvedores" th:id="'dev'+${desenvolvedor.id}">
+							<input class="form-check-input" type="checkbox" th:id="${desenvolvedor}" th:value="${desenvolvedor.id}" th:field="*{desenvolvedores}"></input>
+							<label class="form-check-label" th:text="${desenvolvedor.nome}"></label>
+						</div>
+					</div>
+				</div>			
+				<button type="submit" class="btn btn-primary"><i class="fa-solid fa-floppy-disk"></i> Salvar Projeto</button>
+			</form>
+		</div>
+	</div>
+</div>
+
+<div layout:fragment="scripts">
+<script>
+	$("#linguagem").change(function() {
+		const url = '/desenvolvedor/linguagem?id='+$("#linguagem").val();
+		
+		$(".listaDesenvolvedores").hide();
+		$("#labelDesenvolvedores").hide();
+		$("#semDesenvolvedor").show();
+		
+		$.getJSON(url, function (data) { 	
+			$.each(data, function (key, objeto) {
+				$('#dev'+objeto.id).show();
+				$("#labelDesenvolvedores").show();
+				$("#semDesenvolvedor").hide();
+			})
+		});
+	});
+	
+	$(function () {
+		
+		$("#linguagem").change();
+		
+		$("#_dataEntrega").datepicker({
+			dateFormat: "dd/mm/yy",
+			language: "de",
+			altFormat: "yy-mm-dd",
+			altField: "#dataEntrega"
+		});
+	});
+</script>
+</div>
+	 
+</html>
