@@ -20,6 +20,9 @@ import com.gft.projetos.services.ProjetoService;
 @Controller
 @RequestMapping("/projeto")
 public class ProjetoController {
+	
+	private final String PROJETO = "projeto";
+	private final String MENSAGEM = "mensagem";
 
 	@Autowired
 	private ProjetoService projetoService;
@@ -35,43 +38,32 @@ public class ProjetoController {
 		
 		ModelAndView mv = new ModelAndView("projeto/form.html");
 		
-		Projeto projeto;
+		obterProjeto(id, mv);
 		
-		if(id==null) {
-			projeto = new Projeto();
-		} else {
-			projeto = buscaProjeto(mv, id);
-		}
-		
-		adicionarObjetosMV(mv, projeto);
+		adicionarListasExtras(mv);
 		
 		return mv;
 	}
 	
 	
 	@PostMapping("/editar")
-	public ModelAndView salvarProjeto(@Valid Projeto projeto, BindingResult bindingResult) {
+	public ModelAndView salvarProjeto(
+			@Valid Projeto projeto
+			, BindingResult bindingResult
+	){
 		
 		ModelAndView mv = new ModelAndView("projeto/form.html");
-		
-		boolean novo = true;
-		
-		if(projeto.getId() != null)
-			novo = false;
 		
 		if(bindingResult.hasErrors()) {
 			mv.addObject("projeto", projeto);
 			return mv;
 		}
 		
-		projeto.setApelido(projeto.getApelido().toUpperCase());
-		projetoService.salvarProjeto(projeto);
+		salvarProjeto(projeto);
 		
-		if(novo) {
-			projeto = new Projeto();
-		}
+		obterProjeto(projeto.getId(), mv);
 		
-		adicionarObjetosMV(mv, projeto,"Projeto salvo com sucesso.");
+		adicionarListasExtras(mv,"Projeto salvo com sucesso.");
 		
 		return mv;
 		
@@ -85,38 +77,38 @@ public class ProjetoController {
 		
 		mv.addObject("lista", projetoService.listarProjetos(nome,apelido));
 		
-		mv.addObject("nome",nome);
-		mv.addObject("apelido",apelido);
-		
+		adicionarVariaveisBuscadas(nome, apelido, mv);
 		
 		return mv;
+		
 	}
+
 	
 	@GetMapping("/detalhes")
 	public ModelAndView detalheProjeto(Long id) {
 		
 		ModelAndView mv = new ModelAndView("projeto/detalhes.html");
 		
-		Projeto projeto;
-		
-		projeto = buscaProjeto(mv, id);
-		
-		adicionarObjetosMV(mv, projeto);
+		obterProjeto(id, mv);
 		
 		return mv;
+		
 	}
 
 
 	@GetMapping("/excluir")
-	public ModelAndView excluirProjeto(@RequestParam Long id, RedirectAttributes redirectAttributes) {
+	public ModelAndView excluirProjeto(
+			@RequestParam Long id
+			, RedirectAttributes redirectAttributes
+	){
 		
 		ModelAndView mv = new ModelAndView("redirect:/projeto");
 		
 		try {
 			projetoService.excluirProjeto(id);
-			redirectAttributes.addFlashAttribute("mensagem", "Projeto excluído com sucesso.");
+			redirectAttributes.addFlashAttribute(MENSAGEM, "Projeto excluído com sucesso.");
 		} catch (Exception e) {
-			redirectAttributes.addFlashAttribute("mensagem", "Erro ao excluir! " + e.getMessage());
+			redirectAttributes.addFlashAttribute(MENSAGEM, "Erro ao excluir! " + e.getMessage());
 		}
 		
 		return mv;
@@ -124,42 +116,70 @@ public class ProjetoController {
 	}
 	
 	@GetMapping("/detalhes/excluirDesenvolvedor")
-	public ModelAndView retirarDesenvolvedorDoProjeto(@RequestParam Long idProjeto, @RequestParam Long idDesenvolvedor, RedirectAttributes redirectAttributes) {
+	public ModelAndView retirarDesenvolvedorDoProjeto(
+			@RequestParam Long idProjeto
+			, @RequestParam Long idDesenvolvedor
+			, RedirectAttributes redirectAttributes
+	){
 		
 		ModelAndView mv = new ModelAndView("redirect:/projeto/detalhes?id="+idProjeto);
 		
 		try {
 			projetoService.retirarDesenvolvedorDoProjeto(idProjeto, idDesenvolvedor);
-			redirectAttributes.addFlashAttribute("mensagem", "Desenvolvedor retirado com sucesso.");
+			redirectAttributes.addFlashAttribute(MENSAGEM, "Desenvolvedor retirado com sucesso.");
 		} catch (Exception e) {
-			redirectAttributes.addFlashAttribute("mensagem", "Erro ao retirar desenvolvedor! " + e.getMessage());
+			redirectAttributes.addFlashAttribute(MENSAGEM, "Erro ao retirar desenvolvedor! " + e.getMessage());
 		}
 		
 		return mv;
 		
 	}
 	
-	private void adicionarObjetosMV(ModelAndView mv, Projeto projeto) {
-		adicionarObjetosMV(mv, projeto, "");
+	private void adicionarListasExtras(ModelAndView mv) {
+		adicionarListasExtras(mv, "");
 	}
 	
-	private void adicionarObjetosMV(ModelAndView mv, Projeto projeto, String mensagem) {
-		mv.addObject("projeto", projeto);
+	private void adicionarListasExtras(ModelAndView mv, String mensagem) {
+		
 		mv.addObject("listaDesenvolvedores",desenvolvedorService.listarTodosDesenvolvedores());
 		mv.addObject("listaLinguagens",linguagemService.listarLinguagens());
+		
 		if(!mensagem.isBlank())
-			mv.addObject("mensagem",mensagem);
+			mv.addObject(MENSAGEM,mensagem);
 	}
 
-	private Projeto buscaProjeto(ModelAndView mv, Long id) {
+	private void obterProjeto(Long id, ModelAndView mv) {
+		
 		Projeto projeto;
-		try {
-			projeto = projetoService.obterProjeto(id);
-		} catch (Exception e) {
+		
+		if(id == null) {
 			projeto = new Projeto();
-			mv.addObject("mensagem",e.getMessage());
+		} else {
+  		try {
+  			projeto = projetoService.obterProjeto(id);
+  		} catch (Exception e) {
+  			projeto = new Projeto();
+  			mv.addObject(MENSAGEM,e.getMessage());
+  		}
 		}
-		return projeto;
+		
+		mv.addObject(PROJETO, projeto);
+
+	}
+	
+	private void salvarProjeto(Projeto projeto) {
+		
+		projeto.setApelido(projeto.getApelido().toUpperCase());
+		
+		projetoService.salvarProjeto(projeto);
+	
+	}
+	
+	private void adicionarVariaveisBuscadas(String nome, String apelido, ModelAndView mv) {
+		
+		mv.addObject("nome",nome);
+		mv.addObject("apelido",apelido);
+		
 	}
 
 }

@@ -17,6 +17,7 @@
 			<h4 class="card-title">
 				<span th:text="${desenvolvedor.id == null ? 'Novo' : 'Editar'}"></span> 
 				Desenvolvedor
+				<span th:if="${desenvolvedor.id != null}" th:text="'#'+${desenvolvedor.id}"></span>
 			</h4>
 		</div>
 		<div class="card-body">

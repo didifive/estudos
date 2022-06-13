@@ -17,12 +17,16 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.gft.projetos.entities.Desenvolvedor;
+import com.gft.projetos.exceptions.DesenvolvedorNaoEncontradoException;
 import com.gft.projetos.services.DesenvolvedorService;
 import com.gft.projetos.services.LinguagemService;
 
 @Controller
 @RequestMapping("desenvolvedor")
 public class DesenvolvedorController {
+	
+	private final String DESENVOLVEDOR = "desenvolvedor";
+	private final String MENSAGEM = "mensagem";
 	
 	@Autowired
 	private DesenvolvedorService desenvolvedorService;
@@ -35,59 +39,39 @@ public class DesenvolvedorController {
 		
 		ModelAndView mv = new ModelAndView("desenvolvedor/form.html");
 		
-		Desenvolvedor desenvolvedor;
+		obterDesenvolvedor(id, mv);
 		
-		if(id==null) {
-			mv.addObject("desenvolvedor",new Desenvolvedor());
-			mv.addObject("listaLinguagens",linguagemService.listarLinguagens());
-		} else {
-			try {
-				desenvolvedor = desenvolvedorService.obterDesenvolvedor(id);
-				mv.addObject("listaLinguagens",linguagemService.listarLinguagens());
-			} catch (Exception e) {
-				desenvolvedor = new Desenvolvedor();
-				mv.addObject("listaLinguagens",linguagemService.listarLinguagens());
-				mv.addObject("mensagem",e.getMessage());
-			}
-			mv.addObject("desenvolvedor", desenvolvedor);
-		}
+		mv.addObject("listaLinguagens",linguagemService.listarLinguagens());
 		
 		return mv;
 	}
 	
 	
 	@PostMapping("/editar")
-	public ModelAndView salvarDesenvolvedor(@Valid Desenvolvedor desenvolvedor, BindingResult bindingResult) {
+	public ModelAndView salvarDesenvolvedor(
+			@Valid Desenvolvedor desenvolvedor
+			, BindingResult bindingResult
+	){
 		
 		ModelAndView mv = new ModelAndView("desenvolvedor/form.html");
 		
-		boolean novo = true;
-		
-		if(desenvolvedor.getId() != null)
-			novo = false;
-		
 		if(bindingResult.hasErrors()) {
-			mv.addObject("desenvolvedor", desenvolvedor);
+			mv.addObject(DESENVOLVEDOR, desenvolvedor);
 			return mv;
 		}
 		
-		desenvolvedor.setQuatroLetras(desenvolvedor.getQuatroLetras().toUpperCase());
-		desenvolvedor.setEmail(desenvolvedor.getEmail().toLowerCase());
-		desenvolvedorService.salvarDesenvolvedor(desenvolvedor);
+		salvarDesenvolvedor(desenvolvedor);
 		
-		if(novo) {
-			mv.addObject("desenvoldedor", new Desenvolvedor());
-		} else {
-			mv.addObject("desenvolvedor", desenvolvedor);
-		}
+		obterDesenvolvedor(desenvolvedor.getId(),mv);
 		
-		mv.addObject("mensagem","Desenvolvedor salvo com sucesso.");
+		mv.addObject(MENSAGEM,"Desenvolvedor salvo com sucesso.");
 		mv.addObject("listaLinguagens",linguagemService.listarLinguagens());
 		
 		return mv;
 		
 	}
-	
+
+
 	@GetMapping
 	public ModelAndView listarDesenvolvedores(String nome, String quatroLetras) {
 		
@@ -99,6 +83,7 @@ public class DesenvolvedorController {
 		mv.addObject("quatroLetras", quatroLetras);
 	
 		return mv;
+		
 	}
 	
 	@GetMapping("/detalhes")
@@ -106,20 +91,13 @@ public class DesenvolvedorController {
 		
 		ModelAndView mv = new ModelAndView("desenvolvedor/detalhes.html");
 		
-		Desenvolvedor desenvolvedor;
-		
-		try {
-			desenvolvedor = desenvolvedorService.obterDesenvolvedor(id);
-		} catch (Exception e) {
-			desenvolvedor = new Desenvolvedor();
-			mv.addObject("mensagem",e.getMessage());
-		}
-		
-		mv.addObject("desenvolvedor", desenvolvedor);
+		obterDesenvolvedor(id, mv);
 		
 		return mv;
+		
 	}
-	
+
+
 	@GetMapping("/linguagem")
 	@ResponseBody
 	public List<Desenvolvedor> listarDesenvolvedoresPorLinguagem(@RequestParam Long id) {
@@ -137,18 +115,48 @@ public class DesenvolvedorController {
 	}
 	
 	@GetMapping("/excluir")
-	public ModelAndView excluirDesenvolvedor(@RequestParam Long id, RedirectAttributes redirectAttributes) {
+	public ModelAndView excluirDesenvolvedor(
+			@RequestParam Long id
+			, RedirectAttributes redirectAttributes
+	){
 		
 		ModelAndView mv = new ModelAndView("redirect:/desenvolvedor");
 		
 		try {
 			desenvolvedorService.excluirDesenvolvedor(id);
-			redirectAttributes.addFlashAttribute("mensagem", "Desenvolvedor excluído com sucesso.");
+			redirectAttributes.addFlashAttribute(MENSAGEM, "Desenvolvedor excluído com sucesso.");
 		} catch (Exception e) {
-			redirectAttributes.addFlashAttribute("mensagem", "Erro ao excluir! " + e.getMessage());
+			redirectAttributes.addFlashAttribute(MENSAGEM, "Erro ao excluir! " + e.getMessage());
 		}
 		
 		return mv;
 		
+	}
+	
+	private void obterDesenvolvedor(Long id, ModelAndView mv) {
+		Desenvolvedor desenvolvedor;
+		
+		if(id == null) {
+			desenvolvedor = new Desenvolvedor();
+		} else {
+  		try {
+  			desenvolvedor = desenvolvedorService.obterDesenvolvedor(id);
+  		} catch (DesenvolvedorNaoEncontradoException e) {
+  			desenvolvedor = new Desenvolvedor();
+  			mv.addObject(MENSAGEM,e.getMessage());
+  		}
+		}
+		
+		mv.addObject(DESENVOLVEDOR, desenvolvedor);
+
+	}
+	
+	private void salvarDesenvolvedor(Desenvolvedor desenvolvedor) {
+		
+		desenvolvedor.setQuatroLetras(desenvolvedor.getQuatroLetras().toUpperCase());
+		desenvolvedor.setEmail(desenvolvedor.getEmail().toLowerCase());
+		
+		desenvolvedorService.salvarDesenvolvedor(desenvolvedor);
+	
 	}
 }

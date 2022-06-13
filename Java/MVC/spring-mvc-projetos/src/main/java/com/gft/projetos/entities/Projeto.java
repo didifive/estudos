@@ -112,6 +112,4 @@ public class Projeto {
 		this.desenvolvedores = desenvolvedores;
 	}
 	
-	
-	
 }

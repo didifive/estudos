@@ -13,6 +13,7 @@
 			<h4 class="card-title">
 				<span th:text="${linguagem.id == null ? 'Nova' : 'Editar'}"></span> 
 				Linguagem
+				<span th:if="${linguagem.id != null}" th:text="'#'+${linguagem.id}"></span>
 			</h4>
 		</div>
 		<div class="card-body">

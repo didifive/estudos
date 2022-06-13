@@ -6,67 +6,69 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.GetMapping;
+import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.gft.projetos.entities.Linguagem;
+import com.gft.projetos.exceptions.LinguagemNaoEncontradaException;
 import com.gft.projetos.services.LinguagemService;
 
 @Controller
 @RequestMapping("linguagem")
 public class LinguagemController {
 	
+	private final String LINGUAGEM = "linguagem";
+	private final String MENSAGEM = "mensagem";
+	
 	@Autowired
 	private LinguagemService linguagemService;
 	
-	@RequestMapping(path = "/novo")
-	public ModelAndView novaLinguagem() {
+	@GetMapping("/editar")
+	public ModelAndView editarLinguagem(@RequestParam(required = false) Long id) {
 		
 		ModelAndView mv = new ModelAndView("linguagem/form.html");
-		mv.addObject("linguagem", new Linguagem());
+		
+		obterLinguagem(id, mv);
 		
 		return mv;
+	
 	}
 	
-	@RequestMapping(method = RequestMethod.POST, path = "/novo")
-	public ModelAndView salvarLinguagem(@Valid Linguagem linguagem, BindingResult bindingResult) {
+	@PostMapping("/editar")
+	public ModelAndView salvarLinguagem(
+			@Valid Linguagem linguagem
+			, BindingResult bindingResult
+	){
 		
 		ModelAndView mv = new ModelAndView("linguagem/form.html");
 		
-		boolean novo = true;
-		
-		if(linguagem.getId() != null)
-			novo = false;
-		
 		if(bindingResult.hasErrors()) {
-			mv.addObject("linguagem", linguagem);
+			mv.addObject(LINGUAGEM, linguagem);
 			return mv;
 		}
 		
-		Linguagem linguagemSalva = linguagemService.salvarLinguagem(linguagem);
+		salvarLinguagem(linguagem);
 		
-		if(novo) {
-			mv.addObject("linguagem", new Linguagem());
-		} else {
-			mv.addObject("linguagem", linguagemSalva);
-		}
+		obterLinguagem(linguagem.getId(),mv);
 		
-		mv.addObject("mensagem","Linguagem salva com sucesso.");
+		mv.addObject(MENSAGEM,"Linguagem salva com sucesso.");
 		
 		return mv;
 		
 	}
 	
-	@RequestMapping
+	@GetMapping
 	public ModelAndView listarLinguagens() {
 		
 		ModelAndView mv = new ModelAndView("linguagem/listar.html");
+		
 		mv.addObject("lista", linguagemService.listarLinguagens());
 		
 		return mv;
+		
 	}
 	
 	@GetMapping("/detalhes")
@@ -74,35 +76,7 @@ public class LinguagemController {
 		
 		ModelAndView mv = new ModelAndView("linguagem/detalhes.html");
 		
-		Linguagem linguagem;
-		
-		try {
-			linguagem = linguagemService.obterLinguagem(id);
-		} catch (Exception e) {
-			linguagem = new Linguagem();
-			mv.addObject("mensagem",e.getMessage());
-		}
-		
-		mv.addObject("linguagem", linguagem);
-		
-		return mv;
-	}
-	
-	@RequestMapping("/editar")
-	public ModelAndView editarLinguagem(@RequestParam Long id) {
-		
-		ModelAndView mv = new ModelAndView("linguagem/form.html");
-		
-		Linguagem linguagem;
-		
-		try {
-			linguagem = linguagemService.obterLinguagem(id);
-		} catch (Exception e) {
-			linguagem = new Linguagem();
-			mv.addObject("mensagem",e.getMessage());
-		}
-		
-		mv.addObject("linguagem", linguagem);
+		obterLinguagem(id, mv);
 		
 		return mv;
 		
@@ -115,14 +89,39 @@ public class LinguagemController {
 		
 		try {
 			linguagemService.excluirLinguagem(id);
-			redirectAttributes.addFlashAttribute("mensagem", "Linguagem excluída com sucesso.");
+			redirectAttributes.addFlashAttribute(MENSAGEM, "Linguagem excluída com sucesso.");
 		} catch (Exception e) {
-			redirectAttributes.addFlashAttribute("mensagem", "Erro ao excluir mensagem! " + e.getMessage());
+			redirectAttributes.addFlashAttribute(MENSAGEM, "Erro ao excluir linguagem! " + e.getMessage());
 		}
 		
 		
 		return mv;
 		
+	}
+	
+	private void obterLinguagem(Long id, ModelAndView mv) {
+		
+		Linguagem linguagem;
+		
+		if(id == null) {
+			linguagem = new Linguagem();
+		} else {
+  		try {
+  			linguagem = linguagemService.obterLinguagem(id);
+  		} catch (LinguagemNaoEncontradaException e) {
+  			linguagem = new Linguagem();
+  			mv.addObject(MENSAGEM,e.getMessage());
+  		}
+		}
+		
+		mv.addObject(LINGUAGEM, linguagem);
+
+	}
+	
+	private void salvarLinguagem(Linguagem linguagem) {
+		
+		linguagemService.salvarLinguagem(linguagem);
+	
 	}
 	
 }

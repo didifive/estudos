@@ -7,6 +7,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import com.gft.projetos.entities.Linguagem;
+import com.gft.projetos.exceptions.LinguagemNaoEncontradaException;
 import com.gft.projetos.repositories.LinguagemRepository;
 
 @Service
@@ -16,6 +17,7 @@ public class LinguagemService {
 	private LinguagemRepository linguagemRepository;
 	
 	public Linguagem salvarLinguagem(Linguagem linguagem) {
+		
 		return linguagemRepository.save(linguagem);
 		
 	}
@@ -23,22 +25,31 @@ public class LinguagemService {
 	public List<Linguagem> listarLinguagens() {
 		
 		return linguagemRepository.findAll();
+		
 	}
 	
-	public Linguagem obterLinguagem(Long id) throws Exception {
+	public Linguagem obterLinguagem(Long id) throws LinguagemNaoEncontradaException {
 		
+		return verificaLinguagem(id);
+		
+	}
+
+	public void excluirLinguagem(Long id) throws LinguagemNaoEncontradaException {
+		
+		verificaLinguagem(id);
+
+		linguagemRepository.deleteById(id);
+		
+	}
+
+	private Linguagem verificaLinguagem(Long id) throws LinguagemNaoEncontradaException {
 		Optional<Linguagem> linguagem = linguagemRepository.findById(id);
 		
 		if(linguagem.isEmpty()) {
-			throw new Exception("Linguagem não encontrada.");
+			throw new LinguagemNaoEncontradaException("Linguagem não encontrada.");
 		}
 		
 		return linguagem.get();
-	}
-
-	public void excluirLinguagem(Long id) {
-
-		linguagemRepository.deleteById(id);
 		
 	}
 

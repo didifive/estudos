@@ -8,6 +8,8 @@ import org.springframework.stereotype.Service;
 
 import com.gft.projetos.entities.Desenvolvedor;
 import com.gft.projetos.entities.Projeto;
+import com.gft.projetos.exceptions.DesenvolvedorNaoEncontradoException;
+import com.gft.projetos.exceptions.ProjetoNaoEncontradoException;
 import com.gft.projetos.repositories.ProjetoRepository;
 
 @Service
@@ -17,7 +19,7 @@ public class ProjetoService {
 	private ProjetoRepository projetoRepository;
 	
 	@Autowired
-	DesenvolvedorService desenvolvedorService;
+	private DesenvolvedorService desenvolvedorService;
 	
 	public Projeto salvarProjeto(Projeto projeto) {
 		
@@ -47,12 +49,12 @@ public class ProjetoService {
 		
 	}
 	
-	public Projeto obterProjeto(Long id) throws Exception {
+	public Projeto obterProjeto(Long id) throws ProjetoNaoEncontradoException {
 		
 		Optional<Projeto> projeto = projetoRepository.findById(id);
 		
 		if(projeto.isEmpty()) {
-			throw new Exception("Projeto não encontrado.");
+			throw new ProjetoNaoEncontradoException("Projeto não encontrado.");
 		}
 		
 		return projeto.get();
@@ -64,7 +66,8 @@ public class ProjetoService {
 		
 	}
 	
-	public void retirarDesenvolvedorDoProjeto(Long idProjeto, Long idDesenvolvedor) throws Exception {
+	public void retirarDesenvolvedorDoProjeto(Long idProjeto, Long idDesenvolvedor)
+			throws ProjetoNaoEncontradoException, DesenvolvedorNaoEncontradoException {
 		
 		Projeto projeto = obterProjeto(idProjeto);
 		Desenvolvedor desenvolvedor = desenvolvedorService.obterDesenvolvedor(idDesenvolvedor);
@@ -72,6 +75,7 @@ public class ProjetoService {
 		projeto.getDesenvolvedores().remove(desenvolvedor);
 		
 		projetoRepository.save(projeto);
+		
 	}
 	
 }
