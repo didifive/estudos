@@ -44,6 +44,19 @@ public class DesenvolvedorService {
 	
 	public Desenvolvedor obterDesenvolvedor(Long id) throws DesenvolvedorNaoEncontradoException {
 		
+		return verificaDesenvolvedor(id);
+		
+	}
+
+	public void excluirDesenvolvedor(Long id) throws DesenvolvedorNaoEncontradoException {
+		
+		verificaDesenvolvedor(id);
+
+		desenvolvedorRepository.deleteById(id);
+		
+	}
+	
+	public Desenvolvedor verificaDesenvolvedor(Long id) throws DesenvolvedorNaoEncontradoException {
 		Optional<Desenvolvedor> desenvolvedor = desenvolvedorRepository.findById(id);
 		
 		if(desenvolvedor.isEmpty()) {
@@ -51,12 +64,6 @@ public class DesenvolvedorService {
 		}
 		
 		return desenvolvedor.get();
-	}
-
-	public void excluirDesenvolvedor(Long id) {
-
-		desenvolvedorRepository.deleteById(id);
-		
 	}
 
 }

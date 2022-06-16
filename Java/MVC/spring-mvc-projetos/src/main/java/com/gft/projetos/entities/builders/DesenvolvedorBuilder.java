@@ -1,7 +1,9 @@
 package com.gft.projetos.entities.builders;
 
 import java.math.BigDecimal;
+import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 import com.gft.projetos.entities.Desenvolvedor;
 import com.gft.projetos.entities.Linguagem;
@@ -50,6 +52,16 @@ public class DesenvolvedorBuilder {
 	}
 
 	public DesenvolvedorBuilder withProjetos(List<Projeto> projetos) {
+		instancia.setProjetos(projetos);
+		return this;
+	}
+	
+	public DesenvolvedorBuilder withProjeto(Projeto projeto) {
+		List<Projeto> projetos = new ArrayList<>();
+		if(instancia.getProjetos() != null) {
+			projetos = instancia.getProjetos().stream().collect(Collectors.toList());
+		}
+		projetos.add(projeto);
 		instancia.setProjetos(projetos);
 		return this;
 	}
