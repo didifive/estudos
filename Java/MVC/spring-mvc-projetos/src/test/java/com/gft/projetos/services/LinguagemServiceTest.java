@@ -39,8 +39,7 @@ class LinguagemServiceTest {
 	private LinguagemService linguagemService;
 	
 	private Linguagem linguagem;
-	
-	
+		
 	@BeforeEach
 	void setup() {
   	// given
@@ -48,11 +47,12 @@ class LinguagemServiceTest {
 	}
 	
 	private void assertLinguagem(Linguagem linguagemAtual) throws MultipleFailuresError {
+		// given
 		Linguagem linguagemEsperada = LinguagemUtils.createFakeEntity();
 		
 		assertAll(
-  		"linguagem",
-  		() -> assertThat(linguagemAtual).isNotNull()
+  		"linguagem"
+  		,() -> assertThat(linguagemAtual).isNotNull()
   		,() -> assertEquals(linguagemEsperada.getId(),							linguagemAtual.getId())
   		,() -> assertEquals(linguagemEsperada.getNome(), 						linguagemAtual.getNome())
   		,() -> assertEquals(linguagemEsperada.getDesenvolvedores(), linguagemAtual.getDesenvolvedores())
@@ -121,8 +121,8 @@ class LinguagemServiceTest {
     
     assertAll(
     	"linguagemRepository mock"
-    	, () -> verify(linguagemRepository, times(1)).findById(linguagem.getId())
-    	, () -> verify(linguagemRepository, times(1)).deleteById(linguagem.getId())
+    	,() -> verify(linguagemRepository, times(1)).findById(linguagem.getId())
+    	,() -> verify(linguagemRepository, times(1)).deleteById(linguagem.getId())
     );
   }
     

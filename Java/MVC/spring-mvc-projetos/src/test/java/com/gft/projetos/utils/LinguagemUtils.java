@@ -4,7 +4,6 @@ import java.util.Collections;
 import java.util.List;
 
 import org.mockito.Mock;
-import org.mockito.Spy;
 
 import com.gft.projetos.entities.Desenvolvedor;
 import com.gft.projetos.entities.Linguagem;
@@ -14,10 +13,10 @@ import com.gft.projetos.entities.builders.LinguagemBuilder;
 
 public class LinguagemUtils {
 	
-	@Spy
+	@Mock
 	private static Desenvolvedor desenvolvedor;
 	
-	@Spy
+	@Mock
 	private static Projeto projeto;
 	
 	private static final Long ID = 1L;
