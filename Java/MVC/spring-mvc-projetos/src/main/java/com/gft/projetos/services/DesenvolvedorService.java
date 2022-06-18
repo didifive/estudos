@@ -13,6 +13,8 @@ import com.gft.projetos.repositories.DesenvolvedorRepository;
 @Service
 public class DesenvolvedorService {
 	
+	public static final String ERROR_MESSAGE_NAO_ENCONTRADO = "Desenvolvedor não encontrado.";
+	
 	@Autowired
 	private DesenvolvedorRepository desenvolvedorRepository;
 	
@@ -60,7 +62,7 @@ public class DesenvolvedorService {
 		Optional<Desenvolvedor> desenvolvedor = desenvolvedorRepository.findById(id);
 		
 		if(desenvolvedor.isEmpty()) {
-			throw new DesenvolvedorNaoEncontradoException("Desenvolvedor não encontrado.");
+			throw new DesenvolvedorNaoEncontradoException(ERROR_MESSAGE_NAO_ENCONTRADO);
 		}
 		
 		return desenvolvedor.get();

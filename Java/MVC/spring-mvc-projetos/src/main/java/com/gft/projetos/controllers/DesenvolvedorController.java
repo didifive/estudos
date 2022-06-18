@@ -18,6 +18,7 @@ import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.gft.projetos.entities.Desenvolvedor;
 import com.gft.projetos.exceptions.DesenvolvedorNaoEncontradoException;
+import com.gft.projetos.exceptions.LinguagemNaoEncontradaException;
 import com.gft.projetos.services.DesenvolvedorService;
 import com.gft.projetos.services.LinguagemService;
 
@@ -25,8 +26,21 @@ import com.gft.projetos.services.LinguagemService;
 @RequestMapping("desenvolvedor")
 public class DesenvolvedorController {
 	
-	private final String DESENVOLVEDOR = "desenvolvedor";
-	private final String MENSAGEM = "mensagem";
+	//ModelAndView Objects
+	protected static final String DESENVOLVEDOR = "desenvolvedor";
+	protected static final String MENSAGEM = "mensagem";
+	protected static final String LISTA = "lista";
+	protected static final String LISTA_LINGUAGENS = "listaLinguagens";
+	
+	//Path and files Views of Desenvolvedor
+	protected static final String FORM = DESENVOLVEDOR + "/form.html";
+	protected static final String LISTAR = DESENVOLVEDOR + "/listar.html";
+	protected static final String DETALHES = DESENVOLVEDOR + "/detalhes.html";
+	
+	//Messages
+	protected static final String MESSAGE_SAVE_SUCCESS = "Desenvolvedor salvo com sucesso.";
+	protected static final String MESSAGE_DELETE_SUCCESS = "Desenvolvedor excluído com sucesso.";
+	protected static final String MESSAGE_DELETE_ERROR = "Erro ao excluir desenvolvedor! ";
 	
 	@Autowired
 	private DesenvolvedorService desenvolvedorService;
@@ -37,11 +51,11 @@ public class DesenvolvedorController {
 	@GetMapping("/editar")
 	public ModelAndView editarDesenvolvedor(@RequestParam(required = false) Long id) {
 		
-		ModelAndView mv = new ModelAndView("desenvolvedor/form.html");
+		ModelAndView mv = new ModelAndView(FORM);
 		
 		obterDesenvolvedor(id, mv);
 		
-		mv.addObject("listaLinguagens",linguagemService.listarLinguagens());
+		mv.addObject(LISTA_LINGUAGENS,linguagemService.listarLinguagens());
 		
 		return mv;
 	}
@@ -53,19 +67,19 @@ public class DesenvolvedorController {
 			, BindingResult bindingResult
 	){
 		
-		ModelAndView mv = new ModelAndView("desenvolvedor/form.html");
+		ModelAndView mv = new ModelAndView(FORM);
 		
 		if(bindingResult.hasErrors()) {
 			mv.addObject(DESENVOLVEDOR, desenvolvedor);
 			return mv;
 		}
 		
-		salvarDesenvolvedor(desenvolvedor);
+		desenvolvedor = salvarDesenvolvedor(desenvolvedor);
 		
 		obterDesenvolvedor(desenvolvedor.getId(),mv);
 		
-		mv.addObject(MENSAGEM,"Desenvolvedor salvo com sucesso.");
-		mv.addObject("listaLinguagens",linguagemService.listarLinguagens());
+		mv.addObject(MENSAGEM,MESSAGE_SAVE_SUCCESS);
+		mv.addObject(LISTA_LINGUAGENS,linguagemService.listarLinguagens());
 		
 		return mv;
 		
@@ -75,9 +89,9 @@ public class DesenvolvedorController {
 	@GetMapping
 	public ModelAndView listarDesenvolvedores(String nome, String quatroLetras) {
 		
-		ModelAndView mv = new ModelAndView("desenvolvedor/listar.html");
+		ModelAndView mv = new ModelAndView(LISTAR);
 		
-		mv.addObject("lista", desenvolvedorService.listarDesenvolvedores(nome, quatroLetras));
+		mv.addObject(LISTA, desenvolvedorService.listarDesenvolvedores(nome, quatroLetras));
 		
 		mv.addObject("nome", nome);
 		mv.addObject("quatroLetras", quatroLetras);
@@ -89,7 +103,7 @@ public class DesenvolvedorController {
 	@GetMapping("/detalhes")
 	public ModelAndView detalheProjeto(Long id) {
 		
-		ModelAndView mv = new ModelAndView("desenvolvedor/detalhes.html");
+		ModelAndView mv = new ModelAndView(DETALHES);
 		
 		obterDesenvolvedor(id, mv);
 		
@@ -106,7 +120,7 @@ public class DesenvolvedorController {
 		
 		try {
 			desenvolvedores = linguagemService.obterLinguagem(id).getDesenvolvedores();
-		} catch (Exception e) {
+		} catch (LinguagemNaoEncontradaException e) {
 			desenvolvedores = new ArrayList<>(); 
 		}
 		
@@ -120,13 +134,13 @@ public class DesenvolvedorController {
 			, RedirectAttributes redirectAttributes
 	){
 		
-		ModelAndView mv = new ModelAndView("redirect:/desenvolvedor");
+		ModelAndView mv = new ModelAndView("redirect:/"+DESENVOLVEDOR);
 		
 		try {
 			desenvolvedorService.excluirDesenvolvedor(id);
-			redirectAttributes.addFlashAttribute(MENSAGEM, "Desenvolvedor excluído com sucesso.");
+			redirectAttributes.addFlashAttribute(MENSAGEM, MESSAGE_DELETE_SUCCESS);
 		} catch (Exception e) {
-			redirectAttributes.addFlashAttribute(MENSAGEM, "Erro ao excluir! " + e.getMessage());
+			redirectAttributes.addFlashAttribute(MENSAGEM, MESSAGE_DELETE_ERROR + e.getMessage());
 		}
 		
 		return mv;
@@ -151,12 +165,14 @@ public class DesenvolvedorController {
 
 	}
 	
-	private void salvarDesenvolvedor(Desenvolvedor desenvolvedor) {
+	private Desenvolvedor salvarDesenvolvedor(Desenvolvedor desenvolvedor) {
 		
-		desenvolvedor.setQuatroLetras(desenvolvedor.getQuatroLetras().toUpperCase());
-		desenvolvedor.setEmail(desenvolvedor.getEmail().toLowerCase());
+		if(!desenvolvedor.getQuatroLetras().isBlank())
+			desenvolvedor.setQuatroLetras(desenvolvedor.getQuatroLetras().toUpperCase());
+		if(!desenvolvedor.getEmail().isBlank())
+			desenvolvedor.setEmail(desenvolvedor.getEmail().toLowerCase());
 		
-		desenvolvedorService.salvarDesenvolvedor(desenvolvedor);
+		return desenvolvedorService.salvarDesenvolvedor(desenvolvedor);
 	
 	}
 }

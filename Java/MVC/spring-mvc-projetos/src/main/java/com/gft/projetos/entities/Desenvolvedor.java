@@ -2,6 +2,7 @@ package com.gft.projetos.entities;
 
 import java.math.BigDecimal;
 import java.util.List;
+import java.util.Objects;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -32,6 +33,7 @@ public class Desenvolvedor {
 	@Size(min = 4,max = 4, message="4letras deve conter 4 caracteres")
 	private String quatroLetras;
 	
+	@NotEmpty(message = "Email não pode ser vazio")
 	@Email
 	private String email;
 	
@@ -100,8 +102,26 @@ public class Desenvolvedor {
 
 	public void setProjetos(List<Projeto> projetos) {
 		this.projetos = projetos;
+	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(email, id, linguagem, nome, projetos, quatroLetras, salarioMensal);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Desenvolvedor other = (Desenvolvedor) obj;
+		return Objects.equals(email, other.email) && Objects.equals(id, other.id)
+				&& Objects.equals(linguagem, other.linguagem) && Objects.equals(nome, other.nome)
+				&& Objects.equals(projetos, other.projetos) && Objects.equals(quatroLetras, other.quatroLetras)
+				&& Objects.equals(salarioMensal, other.salarioMensal);
 	}	
-	
-	
 
 }
