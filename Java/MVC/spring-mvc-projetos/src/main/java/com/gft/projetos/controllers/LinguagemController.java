@@ -26,10 +26,9 @@ public class LinguagemController {
 	protected static final String LISTA = "lista";
 	
 	//Path and files Views of Linguagem
-	protected static final String ROOT = "linguagem";
-	protected static final String FORM = ROOT + "/form.html";
-	protected static final String LISTAR = ROOT + "/listar.html";
-	protected static final String DETALHES = ROOT + "/detalhes.html";
+	protected static final String FORM = LINGUAGEM + "/form.html";
+	protected static final String LISTAR = LINGUAGEM + "/listar.html";
+	protected static final String DETALHES = LINGUAGEM + "/detalhes.html";
 	
 	//Messages
 	protected static final String MESSAGE_SAVE_SUCCESS = "Linguagem salva com sucesso.";
@@ -98,7 +97,7 @@ public class LinguagemController {
 	@GetMapping("/excluir")
 	public ModelAndView excluirLinguagem(@RequestParam Long id, RedirectAttributes redirectAttributes) {
 		
-		ModelAndView mv = new ModelAndView("redirect:/"+ROOT);
+		ModelAndView mv = new ModelAndView("redirect:/"+LINGUAGEM);
 		
 		try {
 			linguagemService.excluirLinguagem(id);

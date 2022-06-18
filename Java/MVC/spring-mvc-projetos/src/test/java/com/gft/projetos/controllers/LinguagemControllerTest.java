@@ -151,7 +151,6 @@ class LinguagemControllerTest {
   @DisplayName("2.3. Quando GET é chamado em editar com id inválido então uma nova Linguagem e mensagem são retornados")
   void whenGETIsCalledInEditarWithInvalidIdThenANewLinguagemAndMensagemAreReturned() throws Exception {
   	//given
-  	final Long ID_INVALIDO = 2L;
   	String caminho = EDITAR + "?id=" + ID_INVALIDO;
   	
   	//when
