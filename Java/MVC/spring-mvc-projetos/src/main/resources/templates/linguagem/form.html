@@ -17,7 +17,7 @@
 			</h4>
 		</div>
 		<div class="card-body">
-			<form method="post" th:object="${linguagem}" th:action="@{/linguagem/novo}">
+			<form method="post" th:object="${linguagem}" th:action="@{/linguagem/editar}">
 				<input type="hidden" th:field="*{id}"></input>
 				<div class="form-group mb-3">
 					<label for="nome">Nome da Linguagem:</label>
