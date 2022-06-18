@@ -1,6 +1,7 @@
 package com.gft.projetos.entities;
 
 import java.util.List;
+import java.util.Objects;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -54,5 +55,25 @@ public class Linguagem {
 	public void setProjetos(List<Projeto> projetos) {
 		this.projetos = projetos;
 	}
+	
+	@Override
+	public int hashCode() {
+		return Objects.hash(desenvolvedores, id, nome, projetos);
+	}
+	
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Linguagem other = (Linguagem) obj;
+		return Objects.equals(desenvolvedores, other.desenvolvedores) && Objects.equals(id, other.id)
+				&& Objects.equals(nome, other.nome) && Objects.equals(projetos, other.projetos);
+	}
+	
+	
 	
 }

@@ -13,6 +13,8 @@ import com.gft.projetos.repositories.LinguagemRepository;
 @Service
 public class LinguagemService {
 	
+	public static final String ERROR_MESSAGE_NAO_ENCONTRADO = "Linguagem não encontrada.";
+	
 	@Autowired
 	private LinguagemRepository linguagemRepository;
 	
@@ -46,7 +48,7 @@ public class LinguagemService {
 		Optional<Linguagem> linguagem = linguagemRepository.findById(id);
 		
 		if(linguagem.isEmpty()) {
-			throw new LinguagemNaoEncontradaException("Linguagem não encontrada.");
+			throw new LinguagemNaoEncontradaException(ERROR_MESSAGE_NAO_ENCONTRADO);
 		}
 		
 		return linguagem.get();

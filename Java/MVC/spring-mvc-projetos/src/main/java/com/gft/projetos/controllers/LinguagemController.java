@@ -20,8 +20,21 @@ import com.gft.projetos.services.LinguagemService;
 @RequestMapping("linguagem")
 public class LinguagemController {
 	
-	private final String LINGUAGEM = "linguagem";
-	private final String MENSAGEM = "mensagem";
+	//ModelAndView Objects
+	protected static final String LINGUAGEM = "linguagem";
+	protected static final String MENSAGEM = "mensagem";
+	protected static final String LISTA = "lista";
+	
+	//Path and files Views of Linguagem
+	protected static final String ROOT = "linguagem";
+	protected static final String FORM = ROOT + "/form.html";
+	protected static final String LISTAR = ROOT + "/listar.html";
+	protected static final String DETALHES = ROOT + "/detalhes.html";
+	
+	//Messages
+	protected static final String MESSAGE_SAVE_SUCCESS = "Linguagem salva com sucesso.";
+	protected static final String MESSAGE_DELETE_SUCCESS = "Linguagem excluída com sucesso.";
+	protected static final String MESSAGE_DELETE_ERROR = "Erro ao excluir linguagem! ";
 	
 	@Autowired
 	private LinguagemService linguagemService;
@@ -29,7 +42,7 @@ public class LinguagemController {
 	@GetMapping("/editar")
 	public ModelAndView editarLinguagem(@RequestParam(required = false) Long id) {
 		
-		ModelAndView mv = new ModelAndView("linguagem/form.html");
+		ModelAndView mv = new ModelAndView(FORM);
 		
 		obterLinguagem(id, mv);
 		
@@ -43,18 +56,18 @@ public class LinguagemController {
 			, BindingResult bindingResult
 	){
 		
-		ModelAndView mv = new ModelAndView("linguagem/form.html");
+		ModelAndView mv = new ModelAndView(FORM);
 		
 		if(bindingResult.hasErrors()) {
 			mv.addObject(LINGUAGEM, linguagem);
 			return mv;
 		}
 		
-		salvarLinguagem(linguagem);
+		linguagem = salvarLinguagem(linguagem);
 		
 		obterLinguagem(linguagem.getId(),mv);
 		
-		mv.addObject(MENSAGEM,"Linguagem salva com sucesso.");
+		mv.addObject(MENSAGEM, MESSAGE_SAVE_SUCCESS);
 		
 		return mv;
 		
@@ -63,9 +76,9 @@ public class LinguagemController {
 	@GetMapping
 	public ModelAndView listarLinguagens() {
 		
-		ModelAndView mv = new ModelAndView("linguagem/listar.html");
+		ModelAndView mv = new ModelAndView(LISTAR);
 		
-		mv.addObject("lista", linguagemService.listarLinguagens());
+		mv.addObject(LISTA, linguagemService.listarLinguagens());
 		
 		return mv;
 		
@@ -74,7 +87,7 @@ public class LinguagemController {
 	@GetMapping("/detalhes")
 	public ModelAndView detalheLinguagem(Long id) {
 		
-		ModelAndView mv = new ModelAndView("linguagem/detalhes.html");
+		ModelAndView mv = new ModelAndView(DETALHES);
 		
 		obterLinguagem(id, mv);
 		
@@ -82,16 +95,16 @@ public class LinguagemController {
 		
 	}
 		
-	@RequestMapping("/excluir")
+	@GetMapping("/excluir")
 	public ModelAndView excluirLinguagem(@RequestParam Long id, RedirectAttributes redirectAttributes) {
 		
-		ModelAndView mv = new ModelAndView("redirect:/linguagem");
+		ModelAndView mv = new ModelAndView("redirect:/"+ROOT);
 		
 		try {
 			linguagemService.excluirLinguagem(id);
-			redirectAttributes.addFlashAttribute(MENSAGEM, "Linguagem excluída com sucesso.");
+			redirectAttributes.addFlashAttribute(MENSAGEM, MESSAGE_DELETE_SUCCESS);
 		} catch (Exception e) {
-			redirectAttributes.addFlashAttribute(MENSAGEM, "Erro ao excluir linguagem! " + e.getMessage());
+			redirectAttributes.addFlashAttribute(MENSAGEM, MESSAGE_DELETE_ERROR + e.getMessage());
 		}
 		
 		
@@ -118,9 +131,9 @@ public class LinguagemController {
 
 	}
 	
-	private void salvarLinguagem(Linguagem linguagem) {
+	private Linguagem salvarLinguagem(Linguagem linguagem) {
 		
-		linguagemService.salvarLinguagem(linguagem);
+		return linguagemService.salvarLinguagem(linguagem);
 	
 	}
 	
