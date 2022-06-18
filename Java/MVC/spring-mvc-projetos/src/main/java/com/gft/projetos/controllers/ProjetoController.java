@@ -13,6 +13,9 @@ import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.support.RedirectAttributes;
 
 import com.gft.projetos.entities.Projeto;
+import com.gft.projetos.exceptions.DesenvolvedorNaoEncontradoException;
+import com.gft.projetos.exceptions.DesenvolvedorNaoEncontradoNoProjetoException;
+import com.gft.projetos.exceptions.ProjetoNaoEncontradoException;
 import com.gft.projetos.services.DesenvolvedorService;
 import com.gft.projetos.services.LinguagemService;
 import com.gft.projetos.services.ProjetoService;
@@ -21,8 +24,25 @@ import com.gft.projetos.services.ProjetoService;
 @RequestMapping("/projeto")
 public class ProjetoController {
 	
-	private final String PROJETO = "projeto";
-	private final String MENSAGEM = "mensagem";
+	//ModelAndView Objects
+	protected static final String PROJETO = "projeto";
+	protected static final String MENSAGEM = "mensagem";
+	protected static final String LISTA = "lista";
+	protected static final String LISTA_LINGUAGENS = "listaLinguagens";
+	protected static final String LISTA_DESENVOLVEDORES = "listaDesenvolvedores";
+	
+	//Path and files Views of Projeto
+	protected static final String FORM = PROJETO + "/form.html";
+	protected static final String LISTAR = PROJETO + "/listar.html";
+	protected static final String DETALHES = PROJETO + "/detalhes.html";
+	
+	//Messages
+	protected static final String MESSAGE_SAVE_SUCCESS = "Projeto salvo com sucesso.";
+	protected static final String MESSAGE_DELETE_SUCCESS = "Projeto excluído com sucesso.";
+	protected static final String MESSAGE_DELETE_ERROR = "Erro ao excluir projeto! ";
+	protected static final String MESSAGE_REMOVE_DESENVOLVEDOR_SUCCESS = "Desenvolvedor retirado com sucesso.";
+	protected static final String MESSAGE_REMOVE_DESENVOLVEDOR_ERROR = "Erro ao retirar desenvolvedor! ";
+	
 
 	@Autowired
 	private ProjetoService projetoService;
@@ -36,7 +56,7 @@ public class ProjetoController {
 	@GetMapping("/editar")
 	public ModelAndView editarProjeto(@RequestParam(required = false) Long id) {
 		
-		ModelAndView mv = new ModelAndView("projeto/form.html");
+		ModelAndView mv = new ModelAndView(FORM);
 		
 		obterProjeto(id, mv);
 		
@@ -52,18 +72,18 @@ public class ProjetoController {
 			, BindingResult bindingResult
 	){
 		
-		ModelAndView mv = new ModelAndView("projeto/form.html");
+		ModelAndView mv = new ModelAndView(FORM);
 		
 		if(bindingResult.hasErrors()) {
-			mv.addObject("projeto", projeto);
+			mv.addObject(PROJETO, projeto);
 			return mv;
 		}
 		
-		salvarProjeto(projeto);
+		projeto = salvarProjeto(projeto);
 		
 		obterProjeto(projeto.getId(), mv);
 		
-		adicionarListasExtras(mv,"Projeto salvo com sucesso.");
+		adicionarListasExtras(mv, MESSAGE_SAVE_SUCCESS);
 		
 		return mv;
 		
@@ -73,9 +93,9 @@ public class ProjetoController {
 	@GetMapping
 	public ModelAndView listarProjetos(String nome, String apelido) {
 		
-		ModelAndView mv = new ModelAndView("projeto/listar.html");
+		ModelAndView mv = new ModelAndView(LISTAR);
 		
-		mv.addObject("lista", projetoService.listarProjetos(nome,apelido));
+		mv.addObject(LISTA, projetoService.listarProjetos(nome,apelido));
 		
 		adicionarVariaveisBuscadas(nome, apelido, mv);
 		
@@ -87,7 +107,7 @@ public class ProjetoController {
 	@GetMapping("/detalhes")
 	public ModelAndView detalheProjeto(Long id) {
 		
-		ModelAndView mv = new ModelAndView("projeto/detalhes.html");
+		ModelAndView mv = new ModelAndView(DETALHES);
 		
 		obterProjeto(id, mv);
 		
@@ -102,33 +122,35 @@ public class ProjetoController {
 			, RedirectAttributes redirectAttributes
 	){
 		
-		ModelAndView mv = new ModelAndView("redirect:/projeto");
+		ModelAndView mv = new ModelAndView("redirect:/"+PROJETO);
 		
 		try {
 			projetoService.excluirProjeto(id);
-			redirectAttributes.addFlashAttribute(MENSAGEM, "Projeto excluído com sucesso.");
-		} catch (Exception e) {
-			redirectAttributes.addFlashAttribute(MENSAGEM, "Erro ao excluir! " + e.getMessage());
+			redirectAttributes.addFlashAttribute(MENSAGEM, MESSAGE_DELETE_SUCCESS);
+		} catch (ProjetoNaoEncontradoException e) {
+			redirectAttributes.addFlashAttribute(MENSAGEM, MESSAGE_DELETE_ERROR + e.getMessage());
 		}
 		
 		return mv;
 		
 	}
 	
-	@GetMapping("/detalhes/excluirDesenvolvedor")
-	public ModelAndView retirarDesenvolvedorDoProjeto(
+	@GetMapping("/detalhes/remover-desenvolvedor")
+	public ModelAndView removerDesenvolvedorDoProjeto(
 			@RequestParam Long idProjeto
 			, @RequestParam Long idDesenvolvedor
 			, RedirectAttributes redirectAttributes
 	){
 		
-		ModelAndView mv = new ModelAndView("redirect:/projeto/detalhes?id="+idProjeto);
+		ModelAndView mv = new ModelAndView("redirect:/" + PROJETO + "?id=" + idProjeto);
 		
 		try {
-			projetoService.retirarDesenvolvedorDoProjeto(idProjeto, idDesenvolvedor);
-			redirectAttributes.addFlashAttribute(MENSAGEM, "Desenvolvedor retirado com sucesso.");
-		} catch (Exception e) {
-			redirectAttributes.addFlashAttribute(MENSAGEM, "Erro ao retirar desenvolvedor! " + e.getMessage());
+			projetoService.removerDesenvolvedorDoProjeto(idProjeto, idDesenvolvedor);
+			redirectAttributes.addFlashAttribute(MENSAGEM, MESSAGE_REMOVE_DESENVOLVEDOR_SUCCESS);
+		} catch (ProjetoNaoEncontradoException
+							| DesenvolvedorNaoEncontradoException
+							| DesenvolvedorNaoEncontradoNoProjetoException e) {
+			redirectAttributes.addFlashAttribute(MENSAGEM, MESSAGE_REMOVE_DESENVOLVEDOR_ERROR + e.getMessage());
 		}
 		
 		return mv;
@@ -141,8 +163,8 @@ public class ProjetoController {
 	
 	private void adicionarListasExtras(ModelAndView mv, String mensagem) {
 		
-		mv.addObject("listaDesenvolvedores",desenvolvedorService.listarTodosDesenvolvedores());
-		mv.addObject("listaLinguagens",linguagemService.listarLinguagens());
+		mv.addObject(LISTA_DESENVOLVEDORES,desenvolvedorService.listarTodosDesenvolvedores());
+		mv.addObject(LISTA_LINGUAGENS,linguagemService.listarLinguagens());
 		
 		if(!mensagem.isBlank())
 			mv.addObject(MENSAGEM,mensagem);
@@ -157,7 +179,7 @@ public class ProjetoController {
 		} else {
   		try {
   			projeto = projetoService.obterProjeto(id);
-  		} catch (Exception e) {
+  		} catch (ProjetoNaoEncontradoException e) {
   			projeto = new Projeto();
   			mv.addObject(MENSAGEM,e.getMessage());
   		}
@@ -167,11 +189,11 @@ public class ProjetoController {
 
 	}
 	
-	private void salvarProjeto(Projeto projeto) {
+	private Projeto salvarProjeto(Projeto projeto) {
 		
 		projeto.setApelido(projeto.getApelido().toUpperCase());
 		
-		projetoService.salvarProjeto(projeto);
+		return projetoService.salvarProjeto(projeto);
 	
 	}
 	

@@ -63,7 +63,7 @@ public class ProjetoService {
 		
 	}
 	
-	public void retirarDesenvolvedorDoProjeto(Long idProjeto, Long idDesenvolvedor)
+	public void removerDesenvolvedorDoProjeto(Long idProjeto, Long idDesenvolvedor)
 			throws ProjetoNaoEncontradoException
 				, DesenvolvedorNaoEncontradoException
 				, DesenvolvedorNaoEncontradoNoProjetoException

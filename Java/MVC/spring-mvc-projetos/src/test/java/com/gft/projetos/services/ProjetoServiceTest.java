@@ -207,7 +207,7 @@ class ProjetoServiceTest {
 		when(desenvolvedorService.verificaDesenvolvedor(desenvolvedor.getId())).thenReturn(desenvolvedor);
 		
 		//then
-		projetoService.retirarDesenvolvedorDoProjeto(projeto.getId(), desenvolvedor.getId());
+		projetoService.removerDesenvolvedorDoProjeto(projeto.getId(), desenvolvedor.getId());
 		
 		assertAll(
   		"lista de projeto"
@@ -228,7 +228,7 @@ class ProjetoServiceTest {
 		when(desenvolvedorService.verificaDesenvolvedor(desenvolvedor.getId())).thenReturn(desenvolvedor);
 		
 		//then
-		assertThrows(DesenvolvedorNaoEncontradoNoProjetoException.class, () -> projetoService.retirarDesenvolvedorDoProjeto(projeto.getId(), desenvolvedor.getId()));
+		assertThrows(DesenvolvedorNaoEncontradoNoProjetoException.class, () -> projetoService.removerDesenvolvedorDoProjeto(projeto.getId(), desenvolvedor.getId()));
 
 	}
 	

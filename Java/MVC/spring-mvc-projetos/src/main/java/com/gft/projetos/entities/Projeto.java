@@ -3,6 +3,7 @@ package com.gft.projetos.entities;
 import java.math.BigDecimal;
 import java.util.Date;
 import java.util.List;
+import java.util.Objects;
 
 import javax.persistence.CascadeType;
 import javax.persistence.Entity;
@@ -111,5 +112,27 @@ public class Projeto {
 	public void setDesenvolvedores(List<Desenvolvedor> desenvolvedores) {
 		this.desenvolvedores = desenvolvedores;
 	}
+
+	@Override
+	public int hashCode() {
+		return Objects.hash(apelido, dataEntrega, desenvolvedores, id, linguagem, nome, orcamento);
+	}
+
+	@Override
+	public boolean equals(Object obj) {
+		if (this == obj)
+			return true;
+		if (obj == null)
+			return false;
+		if (getClass() != obj.getClass())
+			return false;
+		Projeto other = (Projeto) obj;
+		return Objects.equals(apelido, other.apelido) && Objects.equals(dataEntrega, other.dataEntrega)
+				&& Objects.equals(desenvolvedores, other.desenvolvedores) && Objects.equals(id, other.id)
+				&& Objects.equals(linguagem, other.linguagem) && Objects.equals(nome, other.nome)
+				&& Objects.equals(orcamento, other.orcamento);
+	}
+	
+	
 	
 }

@@ -121,10 +121,29 @@ class ProjetoBuilderTest {
 	@DisplayName("8. Deve criar novo objeto Projeto com adição de objeto Desenvolvedor em Desenvolvedores")
 	void shouldCreateNewProjetoObjectWithDesenvolvedorObjectInDesenvolvedores() throws Exception {
 		Projeto projeto = new ProjetoBuilder()
-																.withDesenvolvedores(DESENVOLVEDORES)
+																.withDesenvolvedor(DESENVOLVEDOR)
 																.build();
 		
 		assertThat(projeto.getDesenvolvedores()).contains(DESENVOLVEDOR);
+		
+	}
+	
+	@Test
+	@DisplayName("8. Deve criar novo objeto Projeto com adição de objeto Desenvolvedor em Desenvolvedores que já tinha Desenvolvedor")
+	void shouldCreateNewProjetoObjectWithDesenvolvedorObjectInDesenvolvedoresWhoAlreadyHadDesenvolvedor() throws Exception {
+		Desenvolvedor desenvolvedor = DesenvolvedorUtils.createFakeEntity();
+		
+		Projeto projeto = new ProjetoBuilder()
+																.withDesenvolvedor(DESENVOLVEDOR)
+																.withDesenvolvedor(desenvolvedor)
+																.build();
+		
+		assertAll(
+			"Verifica o tamanho da lista de desenvolvedores e se existe o objeto desenvolvedor"
+			,() -> assertEquals(2, projeto.getDesenvolvedores().size())
+			,() -> assertThat(projeto.getDesenvolvedores()).contains(desenvolvedor)
+		);
+		
 		
 	}
 
