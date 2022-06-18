@@ -206,7 +206,7 @@ class LinguagemControllerTest {
   			.andReturn()
   			.getModelAndView();
   	
-  	assertModelAttributeAvailable(mv, LinguagemController.MENSAGEM);
+  	assertModelAttributeAvailable(mv, MENSAGEM);
   			
   }
   
@@ -261,7 +261,7 @@ class LinguagemControllerTest {
   @DisplayName("5. Quando POST é chamado em editar com uma nova Linguagem válida então deve salvar")
   void whenPOSTIsCalledInEditarWithANewValidLinguagemThenShouldSave() throws Exception {
   	//given
-  	Linguagem novaLinguagem = new LinguagemBuilder().withNome("AAAAAAAAAAAA").build();
+  	Linguagem novaLinguagem = new LinguagemBuilder().withNome("Java").build();
   	Linguagem linguagemSalva = new LinguagemBuilder().withId(1L).withNome("Java").build();
   			
   	//when
