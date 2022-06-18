@@ -115,7 +115,7 @@
 							data-bs-target="#modalRemoverDesenvolvedorDoProjeto"
 							th:data-modal-desenvolvedor="${desenvolvedor.nome}"
 							th:data-modal-projeto="${projeto.nome}"
-							th:data-modal-link="@{/projeto/detalhes/excluirDesenvolvedor(idProjeto=${projeto.id},idDesenvolvedor=${desenvolvedor.id})}"
+							th:data-modal-link="@{/projeto/detalhes/remover-desenvolvedor(idProjeto=${projeto.id},idDesenvolvedor=${desenvolvedor.id})}"
 						>
 							<i class="fa-solid fa-eraser"></i> Remover
 						</a>
