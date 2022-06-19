@@ -1,10 +1,12 @@
-# Jokenpo
+# Spring MVC - Projetos
 
+Sistema criado com criado com SpringBoot 2.7.0, Java 8, Maven 3.8.4 para gerenciar as dependências e banco de dados MySQL.
 
+Cadastros de Linguagens, Desenvolvedor e Projetos, relacionando desenvonvedor com linguagem e projeto com linguagem, podendo incluir e remover desenvolvedores em projetos.
 
 ## Instalação
-O projeto com criado com SpringBoot 2.7.0, Java 8, Maven 3.8.4 para gerenciar as dependências e banco de dados MySQL.
-_É possuir servidor do MySQL e fazer as configurações em aplications.properties._
+O projeto foi feito com IDE Eclipse, para abrir o ideal é utilizar a mesma IDE.
+_Deve possuir servidor do MySQL e fazer as configurações em aplications.properties._
 
 
 ## Testes
