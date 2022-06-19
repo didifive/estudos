@@ -10,3 +10,5 @@ As regras são as seguintes:
 
 ## Instalação
 O projeto com criado com a IDE Eclipse e Maven para as dependências. Os testes foram criados com JUnit4
+
+Link do desafio do DojoPuzzles: https://dojopuzzles.com/problems/jokenpo/
