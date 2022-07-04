@@ -1,13 +1,13 @@
-package com.gft.lojadidi;
+package com.gft.projeto;
 
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;
 
 @SpringBootApplication
-public class LojadidiApplication {
+public class LojaApplication {
 
 	public static void main(String[] args) {
-		SpringApplication.run(LojadidiApplication.class, args);
+		SpringApplication.run(LojaApplication.class, args);
 	}
 
 }
