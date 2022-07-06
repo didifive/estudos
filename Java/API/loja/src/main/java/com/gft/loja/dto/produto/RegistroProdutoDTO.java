@@ -1,6 +1,4 @@
-package com.gft.loja.dto.filial;
-
-import com.gft.loja.dto.endereco.EnderecoDTO;
+package com.gft.loja.dto.produto;
 
 import lombok.AllArgsConstructor;
 import lombok.Builder;
@@ -9,12 +7,16 @@ import lombok.NoArgsConstructor;
 
 @Data
 @Builder
-@AllArgsConstructor
 @NoArgsConstructor
-public class RegistroFilialDTO {
+@AllArgsConstructor
+public class RegistroProdutoDTO {
+	
+	private Long id;
 	
 	private String nome;
 	
-	EnderecoDTO endereco;
+	private String descricao;
+	
+	private String unidade;
 
 }

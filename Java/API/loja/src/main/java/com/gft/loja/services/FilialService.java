@@ -1,11 +1,13 @@
 package com.gft.loja.services;
 
-import java.util.List;
 import java.util.Optional;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 
 import com.gft.loja.entities.Filial;
+import com.gft.loja.exception.EntityNotFoundException;
 import com.gft.loja.repositories.FilialRepository;
 
 @Service
@@ -23,16 +25,16 @@ public class FilialService {
 		
 	}
 	
-	public List<Filial> listarTodasAsFiliais() {
+	public Page<Filial> listarTodasAsFiliais(Pageable pageable) {
 		
-		return filialRepository.findAll();
+		return filialRepository.findAll(pageable);
 		
 	}
 
 	public Filial buscarFilial(Long id) {
 		Optional<Filial> optional = filialRepository.findById(id);
 		
-		return optional.orElseThrow(() -> new RuntimeException("Filial não encontrada!"));
+		return optional.orElseThrow(() -> new EntityNotFoundException("Filial não encontrada"));
 	}
 	
 	public Filial atualizarFilial(Filial filial, Long id) {

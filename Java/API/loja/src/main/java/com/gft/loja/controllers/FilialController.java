@@ -1,7 +1,8 @@
 package com.gft.loja.controllers;
 
-import java.util.List;
-
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.DeleteMapping;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -29,10 +30,9 @@ public class FilialController {
 	}
 
 	@GetMapping
-	public ResponseEntity<List<ConsultaFilialDTO>> buscarTodasAsFiliais(){
+	public ResponseEntity<Page<ConsultaFilialDTO>> buscarTodasAsFiliais(@PageableDefault Pageable pageable){
 		
-		return ResponseEntity.ok(filialService.listarTodasAsFiliais().stream()
-				.map(FilialMapper::fromEntity).toList());
+		return ResponseEntity.ok(filialService.listarTodasAsFiliais(pageable).map(FilialMapper::fromEntity));
 		
 	}
 
@@ -50,11 +50,8 @@ public class FilialController {
 	public ResponseEntity<ConsultaFilialDTO> buscarFilial(@PathVariable Long id){
 		
 		Filial filial;
-		try {
-			filial = filialService.buscarFilial(id);
-		} catch (RuntimeException e) {
-			return ResponseEntity.notFound().build();
-		}
+
+		filial = filialService.buscarFilial(id);
 		
 		return ResponseEntity.ok(FilialMapper.fromEntity(filial));
 		
@@ -65,12 +62,8 @@ public class FilialController {
 																							, @PathVariable Long id){
 		
 		Filial filial;
-		try {
-			filial = filialService.atualizarFilial(FilialMapper.fromDTO(dto), id);
-		} catch (RuntimeException e) {
-			return ResponseEntity.notFound().build();
-		}
-		
+		filial = filialService.atualizarFilial(FilialMapper.fromDTO(dto), id);
+
 		return ResponseEntity.ok(FilialMapper.fromEntity(filial));
 		
 	}
@@ -79,12 +72,8 @@ public class FilialController {
 	@DeleteMapping("{id}") //localhost:8080/v1/filiais/2
 	public ResponseEntity<ConsultaFilialDTO> excluirFilial(@PathVariable Long id){
 		
-		try {
-			filialService.excluirFilial(id);
-		} catch (RuntimeException e) {
-			return ResponseEntity.notFound().build();
-		}
-		
+		filialService.excluirFilial(id);
+
 		return ResponseEntity.ok().build();
 		
 	}

@@ -5,11 +5,11 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 
-import com.gft.loja.entities.Filial;
+import com.gft.loja.entities.Fornecedor;
 
 @Repository
-public interface FilialRepository extends JpaRepository<Filial, Long> {
+public interface FornecedorRepository extends JpaRepository<Fornecedor, Long> {
 	
-	Page<Filial> findAll(Pageable pageable);
+	Page<Fornecedor> findAll(Pageable pageable);
 
 }
