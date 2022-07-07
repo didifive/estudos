@@ -1,0 +1,467 @@
+{
+	"info": {
+		"_postman_id": "84906a59-791c-400d-873a-5de86905bc13",
+		"name": "Projeto Loja",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "21083398"
+	},
+	"item": [
+		{
+			"name": "Auth",
+			"item": [
+				{
+					"name": "Gerar Token",
+					"request": {
+						"method": "GET",
+						"header": []
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Filial",
+			"item": [
+				{
+					"name": "Buscar todas as filiais",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/filiais",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"filiais"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Buscar uma Filial",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/filiais/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"filiais",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Criar uma filial",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nome\": \"Matriz\",\r\n    \"endereco\": {\r\n        \"logradouro\": \"Rua A\",\r\n        \"numero\": \"1234\",\r\n        \"complemento\": \"\",\r\n        \"cep\": \"11111111\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/filiais",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"filiais"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Atualizar Filial",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nome\": \"Filial B\",\r\n    \"endereco\": {\r\n        \"logradouro\": \"Rua A\",\r\n        \"numero\": \"1234\",\r\n        \"complemento\": \"\",\r\n        \"cep\": \"11111111\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/filiais/2",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"filiais",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Excluir Filial",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/filiais/2",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"filiais",
+								"2"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Fornecedor",
+			"item": [
+				{
+					"name": "Buscar todos os fornecedores",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/fornecedores",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"fornecedores"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Buscar um Fornecedor",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/fornecedores/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"fornecedores",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Criar um Fornecedor",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"cnpj\": \"11111111000111\",\r\n    \"nome\": \"Fornecedor A\",\r\n    \"telefone\": \"11 39871235\",\r\n    \"email\": \"fornecedora@fornecedora.com.br\",\r\n    \"endereco\": {\r\n        \"logradouro\": \"Rua A\",\r\n        \"numero\": \"1234\",\r\n        \"complemento\": \"\",\r\n        \"cep\": \"11111111\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/fornecedores",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"fornecedores"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Atualizar Fornecedor",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"cnpj\": \"22222222000222\",\r\n    \"nome\": \"Fornecedor B\",\r\n    \"telefone\": \"11 39871235\",\r\n    \"email\": \"fornecedora@fornecedora.com.br\",\r\n    \"endereco\": {\r\n        \"logradouro\": \"Rua A\",\r\n        \"numero\": \"1234\",\r\n        \"complemento\": \"\",\r\n        \"cep\": \"22222222\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/fornecedores/2",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"fornecedores",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Excluir Fornecedor",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/fornecedores/3",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"fornecedores",
+								"3"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Cliente",
+			"item": [
+				{
+					"name": "Buscar todos os clientes",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/clientes",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"clientes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Buscar um Cliente",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/clientes/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"clientes",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Criar um Cliente",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"cpf\": \"12345678925\",\r\n    \"nome\": \"Cliente A\",\r\n    \"telefone\": \"11 39871235\",\r\n    \"email\": \"clientea@clientea.com.br\",\r\n    \"endereco\": {\r\n        \"logradouro\": \"Rua A\",\r\n        \"numero\": \"1234\",\r\n        \"complemento\": \"\",\r\n        \"cep\": \"11111111\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/clientes",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"clientes"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Atualizar Cliente",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"cpf\": \"78945612385\",\r\n    \"nome\": \"Cliente B\",\r\n    \"telefone\": \"11 39871235\",\r\n    \"email\": \"clientea@clientea.com.br\",\r\n    \"endereco\": {\r\n        \"logradouro\": \"Rua A\",\r\n        \"numero\": \"1234\",\r\n        \"complemento\": \"\",\r\n        \"cep\": \"22222222\"\r\n    }\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/clientes/2",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"clientes",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Excluir Cliente",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/clientes/3",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"clientes",
+								"3"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "Produto",
+			"item": [
+				{
+					"name": "Buscar todos os produtos",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/produtos",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"produtos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Buscar um Produto",
+					"request": {
+						"method": "GET",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/produtos/1",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"produtos",
+								"1"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Criar um Produto",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nome\": \"Produto A\",\r\n    \"descricao\": \"Produto é feito de fibra de carbono\",\r\n    \"unidade\": \"Kg\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/produtos",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"produtos"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Atualizar Produto",
+					"request": {
+						"method": "PUT",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"nome\": \"Produto B\",\r\n    \"descricao\": \"Produto B é feito de fibra de vidro\",\r\n    \"unidade\": \"Peça\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{baseUrl}}/produtos/2",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"produtos",
+								"2"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "Excluir Produto",
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{baseUrl}}/produtos/3",
+							"host": [
+								"{{baseUrl}}"
+							],
+							"path": [
+								"produtos",
+								"3"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	]
+}
