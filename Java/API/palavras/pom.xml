@@ -9,7 +9,7 @@
 		<relativePath/> <!-- lookup parent from repository -->
 	</parent>
 	<groupId>com.gft</groupId>
-	<artifactId>palavras</artifactId>
+	<artifactId>palavrasapi</artifactId>
 	<version>0.0.1-SNAPSHOT</version>
 	<name>palavras</name>
 	<description>Desafio Palavras - Semana de Estudos API</description>

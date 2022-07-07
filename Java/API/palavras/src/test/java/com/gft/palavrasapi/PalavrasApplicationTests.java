@@ -1,4 +1,4 @@
-package com.gft.projeto;
+package com.gft.palavrasapi;
 
 import org.junit.jupiter.api.Test;
 import org.springframework.boot.test.context.SpringBootTest;
